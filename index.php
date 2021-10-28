@@ -11,7 +11,8 @@
 <body>
 
   <script type="text/javascript">
-    location.replace("https://localhost/googlemotors/view/home.php");
+   location.href = "https://localhost/googlemotors/view/home.php";
+ 
   </script>
 </body>
 
