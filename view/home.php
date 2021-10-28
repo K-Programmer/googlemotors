@@ -244,6 +244,125 @@
         })
 
 
+        //actualizar------------------------
+        $("#update").on('click', function() {
+
+
+var marca = $("#marca").val();
+var modelo = $("#modelo").val();
+var ano = $("#ano").val();
+var preco = $("#preco").val();
+
+
+
+if (marca == '' || modelo == '' || ano == '' || preco == '') {
+
+  Swal.fire({
+    position: 'center',
+    icon: 'error',
+    title: 'Por favor, preencha todos campos',
+    showConfirmButton: false,
+    timer: 1500
+  })
+
+  event.preventDefault();
+
+} else {
+
+
+
+  $.ajax({
+    method: 'POST',
+    url: "/googlemotors/view/controller/update.php",
+    data: {
+      "marca": marca,
+      "modelo": modelo,
+      "ano": ano,
+      "preco": preco,
+      "cid":selecionado
+    },
+
+  }).done(function(rs) {
+
+    // var result =data; 
+    var data = JSON.parse(rs);
+    console.log(data);
+
+
+
+
+    Swal.fire({
+      position: 'center',
+      icon: 'success',
+      title: 'Carro actualizado com sucessso',
+      showConfirmButton: false,
+      timer: 1500
+    })
+
+    $('#marca').val('');
+    $('#modelo').val('');
+    $('#ano').val('');
+    $('#preco').val('');
+
+    //------------------------------------------------
+
+
+
+
+    var carros = $('#carros tbody');
+    carros.empty();
+
+    for (var i = 0; i < data.length; i++) {
+
+      var id = data[i].cid;
+      var marca = data[i].marca;
+      var modelo = data[i].modelo;
+      var ano = data[i].ano;
+      var preco = data[i].preco;
+
+
+      carros.append('<tr><td class="cid">' + id + '</td><td class="marca">' + marca + '</td><td class="modelo">' + modelo +
+        '</td><td class="ano">' + ano + '</td><td class="preco">' + preco + '</td>' +
+        '<td><button type="button" class="btSelecionar btn btn-sm btn-danger text-white" data-toggle="modal" data-target="#editModal">' + 'selecionar' + '</button>' + '</td></tr>');
+
+
+
+    }
+
+    //Selecionar-----------------------
+    $(".btSelecionar").click(function() {
+      var $row = $(this).closest("tr"); // Find the row
+      var $cid = $row.find(".cid").text(); // Find the text
+      var $marca = $row.find(".marca").text(); // Find the text
+      var $modelo = $row.find(".modelo").text(); // Find the text
+      var $ano = $row.find(".ano").text(); // Find the text
+      var $preco = $row.find(".preco").text(); // Find the text
+
+      $('#marca').val($marca);
+      $('#modelo').val($modelo);
+      $('#ano').val($ano);
+      $('#preco').val($preco);
+      // Let's test it out
+      selecionado = $cid;
+      alert(selecionado);
+
+
+
+    });
+
+
+
+
+
+
+
+
+  })
+}
+
+})
+//-----FIm update
+
 
         //Apagar---------------------------------------------------------------------------------------------
 
@@ -342,7 +461,7 @@
         //----fim apagar
 
 
-        //Actualizar---------------------------------------------------------------------------------------------
+        //Pesquuisar---------------------------------------------------------------------------------------------
 
         $("#pesquisa").keyup(function() {
 
@@ -424,11 +543,11 @@
 
 
         })
-        //----fim actualizar
+        //----fim pesquisar
 
 
 
-      })
+      });
     </script>
 
 </body>
